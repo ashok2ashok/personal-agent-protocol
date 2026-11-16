@@ -12,6 +12,18 @@ breaking 1.0 implementations ([3.4](/docs/spec#versions)). What we expect to wor
 
 In progress. This list grows until 1.1 is published.
 
+### Major changes {#v1-1-major}
+
+<Change title="Versions in the client metadata document" sections="3.4, 4.1, guides#agent-versions, guides#company-versions">
+
+A Personal Agent can list the protocol versions and extension versions it implements in `poppy`, an
+optional member of its client metadata document. Companies can see which versions and extensions
+to build for, and whether the Personal Agents they accept still need a version before they retire
+it. The list is informational: requests still declare their versions in `Poppy-Version` and
+`Poppy-Extensions`.
+
+</Change>
+
 ## Version 1.0 <ViewVersion id="1.0" /> {#v1-0}
 
 Published November 14, 2026. It's [0.4](/docs/0.4/spec) with the fixes implementers needed. Major changes are design decisions. Minor changes

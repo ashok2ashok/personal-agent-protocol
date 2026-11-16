@@ -122,6 +122,8 @@ You choose a protocol version and extension versions for each company, so you ca
 
 Declare in `Poppy-Extensions` only the extensions the company lists, so you don't tell each company which others you support. A `Deprecation` or `Sunset` header on a response is a sign to move that company to a newer version before the date it gives.
 
+List the protocol and extension versions you implement in `poppy` in your client metadata document, and update it as you add and drop versions, so companies can plan which to serve ([4.1](https://personalagentprotocol.org/docs/1.1/spec#agent-identity)). Every company sees the same list, so leave out an extension you don't want to announce.
+
 Record the versions each conversation started in. A company can refuse to continue a conversation in a session with other versions, with `version_mismatch` ([8.2](https://personalagentprotocol.org/docs/1.1/spec#conversation-requests)). To finish it, open a session with those versions while the company still lists them. Otherwise start a new conversation, and tell the user if they were waiting on something in the old one.
 
 ### User IDs
@@ -326,7 +328,8 @@ To add a protocol version ([3.4](https://personalagentprotocol.org/docs/1.1/spec
 1. Publish the new version's document at a path of your own, such as `/poppy/0.4.json`, on the host that serves `poppy.json`. Static files work: each version is one file. Keep the URL the same for as long as you list the version.
 2. Accept both versions at your endpoints, telling them apart by `Poppy-Version`. Where a version needs its own endpoint, such as a browser-session page that changed, give that version's document its own URL.
 3. Make it your preferred version: in one deploy, serve it at `/.well-known/poppy.json` and add the older document's URL to `supported_versions`.
-4. To retire a version, send `Deprecation` and `Sunset` on its responses for a while, then remove it from `supported_versions`, then stop accepting it. A personal agent with a cached document gets `version_unsupported`, fetches `poppy.json` again, and moves.
+4. Before you retire a version, check the `poppy` list in the client metadata document of each personal agent you accept, to see whether any still list only that version ([4.1](https://personalagentprotocol.org/docs/1.1/spec#agent-identity)). The `Poppy-Version` your endpoints receive shows what they use now.
+5. To retire a version, send `Deprecation` and `Sunset` on its responses for a while, then remove it from `supported_versions`, then stop accepting it. A personal agent with a cached document gets `version_unsupported`, fetches `poppy.json` again, and moves.
 
 You can offer several versions of an extension the same way, with an entry for each in `extensions` ([3.3](https://personalagentprotocol.org/docs/1.1/spec#extensions)), and handle each request by the version it declares.
 

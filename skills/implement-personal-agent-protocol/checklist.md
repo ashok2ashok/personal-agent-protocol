@@ -180,6 +180,7 @@ To add a protocol version (3.4):
 - [ ] Publish the new version's document at a path of your own, such as `/poppy/0.4.json`, on the host that serves `poppy.json`. Static files work: each version is one file. Keep the URL the same for as long as you list the version.
 - [ ] Accept both versions at your endpoints, telling them apart by `Poppy-Version`. Where a version needs its own endpoint, such as a browser-session page that changed, give that version's document its own URL.
 - [ ] Make it your preferred version: in one deploy, serve it at `/.well-known/poppy.json` and add the older document's URL to `supported_versions`.
+- [ ] Before you retire a version, check the `poppy` list in the client metadata document of each personal agent you accept, to see whether any still list only that version (4.1). The `Poppy-Version` your endpoints receive shows what they use now.
 - [ ] To retire a version, send `Deprecation` and `Sunset` on its responses for a while, then remove it from `supported_versions`, then stop accepting it. A personal agent with a cached document gets `version_unsupported`, fetches `poppy.json` again, and moves.
 
 ### Recommended: [Verifying personal agents](https://personalagentprotocol.org/docs/1.1/guides#company-agents)

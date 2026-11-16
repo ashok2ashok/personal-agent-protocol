@@ -236,6 +236,11 @@ Declare in `Poppy-Extensions` only the extensions the company lists, so you don'
 which others you support. A `Deprecation` or `Sunset` header on a response is a sign to move that
 company to a newer version before the date it gives.
 
+List the protocol and extension versions you implement in `poppy` in your client metadata document,
+and update it as you add and drop versions, so companies can plan which to serve
+([4.1](/docs/spec#agent-identity)). Every company sees the same list, so leave out an extension you
+don't want to announce.
+
 Record the versions each conversation started in. A company can refuse to continue a conversation in
 a session with other versions, with `version_mismatch` ([8.2](/docs/spec#conversation-requests)). To
 finish it, open a session with those versions while the company still lists them. Otherwise start a
@@ -689,7 +694,11 @@ To add a protocol version ([3.4](/docs/spec#versions)):
    document its own URL.
 3. Make it your preferred version: in one deploy, serve it at `/.well-known/poppy.json` and add the
    older document's URL to `supported_versions`.
-4. To retire a version, send `Deprecation` and `Sunset` on its responses for a while, then remove it
+4. Before you retire a version, check the `poppy` list in the client metadata document of each
+   personal agent you accept, to see whether any still list only that version
+   ([4.1](/docs/spec#agent-identity)). The `Poppy-Version` your endpoints receive shows what they
+   use now.
+5. To retire a version, send `Deprecation` and `Sunset` on its responses for a while, then remove it
    from `supported_versions`, then stop accepting it. A personal agent with a cached document gets
    `version_unsupported`, fetches `poppy.json` again, and moves.
 

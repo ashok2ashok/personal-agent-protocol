@@ -10,6 +10,14 @@ Version 1.0 is published. Build against [1.0](https://personalagentprotocol.org/
 
 In progress. This list grows until 1.1 is published.
 
+### Major changes
+
+#### Versions in the client metadata document
+
+[Spec 3.4](https://personalagentprotocol.org/docs/1.1/spec#versions) · [Spec 4.1](https://personalagentprotocol.org/docs/1.1/spec#agent-identity) · [Guides: Versions](https://personalagentprotocol.org/docs/1.1/guides#agent-versions) · [Guides: Serving several versions](https://personalagentprotocol.org/docs/1.1/guides#company-versions)
+
+A Personal Agent can list the protocol versions and extension versions it implements in `poppy`, an optional member of its client metadata document. Companies can see which versions and extensions to build for, and whether the Personal Agents they accept still need a version before they retire it. The list is informational: requests still declare their versions in `Poppy-Version` and `Poppy-Extensions`.
+
 ## Version 1.0
 
 Published November 14, 2026. It's [0.4](https://personalagentprotocol.org/docs/0.4/spec) with the fixes implementers needed. Major changes are design decisions. Minor changes fill gaps, make the text consistent, or follow an RFC. A change tagged "Breaking" can require an implementation that followed the 0.4 text to change, whether it's major or minor.

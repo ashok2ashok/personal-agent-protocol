@@ -271,7 +271,7 @@ A Company can serve several protocol versions at once, so Personal Agents can mo
 - Every document a Company serves at the same time MUST have the same `organization.domain` and select the same issuer (3.2), so that a new version doesn't change the Company's identifier, and with it User IDs and refresh tokens. Other fields MAY differ by version.
 - Two versions are compatible when they have the same major version and, before 1.0, the same minor version. The Personal Agent chooses the newest version, among `protocol_version` and the versions in `supported_versions`, that is compatible with one it implements, and uses that version's document. If none is, it MUST NOT use any of them.
 
-**Declaring versions.** On every request with the Session header (5.2), the Personal Agent sends the protocol version it implements, compatible with the chosen one, in `Poppy-Version`, as `major.minor`. When it uses extensions with the Company, it also sends `Poppy-Extensions`: an [RFC 9651](https://www.rfc-editor.org/rfc/rfc9651) List of Strings, each the name of an extension in the chosen document, with the version it uses as a String in the `v` parameter. Without `Poppy-Extensions`, or when it fails to parse (RFC 9651 §4.2), the request declares no extensions. The Personal Agent MUST send the same values on every request in a Session, and starts a new Session to change them.
+**Declaring versions.** On every request with the Session header (5.2), the Personal Agent sends the protocol version it implements, compatible with the chosen one, in `Poppy-Version`, as `major.minor`. When it uses extensions with the Company, it also sends `Poppy-Extensions`: an [RFC 9651](https://www.rfc-editor.org/rfc/rfc9651) List of Strings, each the name of an extension in the chosen document, with the version it uses as a String in the `v` parameter. Without `Poppy-Extensions`, or when it fails to parse (RFC 9651 §4.2), the request declares no extensions. The Personal Agent MUST send the same values on every request in a Session, and starts a new Session to change them. It can also list every version it implements in its client metadata document (4.1).
 
 *Request headers: Personal Agent → Company*
 
@@ -320,13 +320,18 @@ A Personal Agent's `client_id` MUST be an HTTPS URL that returns its metadata do
   "logo_uri": "https://agent.example/logo.png",
   "jwks_uri": "https://agent.example/jwks.json",
   "redirect_uris": ["https://agent.example/oauth/callback"],
-  "token_endpoint_auth_method": "private_key_jwt"
+  "token_endpoint_auth_method": "private_key_jwt",
+  "poppy": {
+    "protocol_versions": ["1.1", "1.0"],
+    "extensions": { "operations": ["3"], "links": ["1"] }
+  }
 }
 ```
 
 - `client_id` MUST equal the URL the document was fetched from.
 - `jwks_uri` MUST be an HTTPS URL on the same domain as `client_id`. The key set contains only public keys. They sign client assertions, and the delegations that vouch for the keys that sign Session JWTs (5.2).
 - `redirect_uris` lists where Direct Sign-In may send the User back to (4.2). Each entry MUST be an HTTPS URL on the same domain as `client_id`, or a loopback redirect URI for an app on the User's computer, as [RFC 8252](https://www.rfc-editor.org/rfc/rfc8252) §7.3 defines.
+- `poppy` is optional. It lists what the Personal Agent implements, so a Company can see which versions and extensions to build for, and whether the Personal Agents it accepts still need a version it plans to retire. `protocol_versions` lists the protocol versions it can use, each as `major.minor`, and `extensions` lists the extensions it can use, keyed by name, each with the major versions it can use, as Strings. When its installs or Sessions use different versions, such as during a rollout, it lists every version any of them can use. The list is informational: each request declares the versions it uses in `Poppy-Version` and `Poppy-Extensions` (3.4), and a Company goes by those. The document is the same for every Company, so a Personal Agent can list versions later than the one it uses with a given Company.
 - The Personal Agent authenticates at the token endpoint with a client assertion signed by a key from `jwks_uri` (`private_key_jwt`, [RFC 7523](https://www.rfc-editor.org/rfc/rfc7523)). Its Session JWTs are signed with delegated keys instead (5.2).
 - The client assertion's `aud` MUST be the Company's issuer, as a single string. Companies MUST reject a client assertion with any other `aud`, compared character for character, including their token endpoint URL. This follows [draft-ietf-oauth-rfc7523bis](https://datatracker.ietf.org/doc/draft-ietf-oauth-rfc7523bis/). The endpoints in a Company's metadata aren't checked (3.2), so an `aud` set to an endpoint could name another Company's endpoint, and that Company would accept the assertion.
 - Client assertions follow RFC 7523 §3. The Personal Agent MUST include `iat` and a unique, unguessable `jti`, and MUST set `exp` at most 5 minutes after `iat`. A Company MAY reject a client assertion that lasts longer than 5 minutes, and MUST NOT reject one for lasting 5 minutes or less. The Company MAY reject a reused `jti`, as RFC 7523 §3 allows.
