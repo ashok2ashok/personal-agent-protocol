@@ -32,7 +32,7 @@ There are several areas we want to invest more in, roughly in order of priority 
 
 **Goal:** For actions that are hard to undo, such as a cancellation or a new payment method, a Company can verify that the User approved the exact terms, instead of trusting the Personal Agent's word.
 
-**Where it stands:** In the [Operations extension](https://personalagentprotocol.org/docs/1.0/extensions/operations), an approval covers one revision of an operation's exact terms. It is user approved, when the Personal Agent asks the User, or agent approved, when the Personal Agent approves on the User's instruction, and can carry a reference to the Personal Agent's own record of it. Either way the Company relies on the Personal Agent ([Operations 8.1](https://personalagentprotocol.org/docs/1.0/extensions/operations#approval-proof)), so a Company that wants to see the User approve an action doesn't offer it through operations yet. A signature from the User's device would add a third kind, signed user approval, as one more member of a user approval. Mandates, where the User signs once for a class of actions with limits, such as transfers of up to $50 a week, would build on it. The proposals take three approaches: the User approves on the Company's own page or in its app, the User's device signs the terms with a key the User registered with the Company, or a third party attests to the approval. Some actions also need the account holder, not just anyone on the account, to approve.
+**Where it stands:** In the [Operations extension](https://personalagentprotocol.org/docs/1.1/extensions/operations), an approval covers one revision of an operation's exact terms. It is user approved, when the Personal Agent asks the User, or agent approved, when the Personal Agent approves on the User's instruction, and can carry a reference to the Personal Agent's own record of it. Either way the Company relies on the Personal Agent ([Operations 8.1](https://personalagentprotocol.org/docs/1.1/extensions/operations#approval-proof)), so a Company that wants to see the User approve an action doesn't offer it through operations yet. A signature from the User's device would add a third kind, signed user approval, as one more member of a user approval. Mandates, where the User signs once for a class of actions with limits, such as transfers of up to $50 a week, would build on it. The proposals take three approaches: the User approves on the Company's own page or in its app, the User's device signs the terms with a key the User registered with the Company, or a third party attests to the approval. Some actions also need the account holder, not just anyone on the account, to approve.
 
 **Issues:** [roadmap: approvals](https://github.com/personal-agent-protocol/personal-agent-protocol/issues?q=is%3Aissue%20label%3A%22roadmap%3A%20approvals%22)
 
@@ -40,7 +40,7 @@ There are several areas we want to invest more in, roughly in order of priority 
 
 **Goal:** A Personal Agent can pay a Company in a way that is tied to what the User approved, using existing payment and checkout protocols rather than replacing them.
 
-**Where it stands:** The [UCP extension](https://personalagentprotocol.org/docs/1.0/extensions/ucp) lets a Company that speaks the Universal Commerce Protocol handle carts, checkout, and payment there, while this protocol finds the Company and signs the User in. How payment works with the Operations extension is open. Proposals cover a Payment Provider that issues a credential bound to one approved operation, financing offers, evidence that a payment settled for an approved revision, and strong customer authentication for EU payments.
+**Where it stands:** The [UCP extension](https://personalagentprotocol.org/docs/1.1/extensions/ucp) lets a Company that speaks the Universal Commerce Protocol handle carts, checkout, and payment there, while this protocol finds the Company and signs the User in. How payment works with the Operations extension is open. Proposals cover a Payment Provider that issues a credential bound to one approved operation, financing offers, evidence that a payment settled for an approved revision, and strong customer authentication for EU payments.
 
 **Issues:** [roadmap: payments](https://github.com/personal-agent-protocol/personal-agent-protocol/issues?q=is%3Aissue%20label%3A%22roadmap%3A%20payments%22)
 
@@ -56,7 +56,7 @@ There are several areas we want to invest more in, roughly in order of priority 
 
 **Goal:** A User can sign in at a Company with an account they already have at an identity provider, and the Company accepts that sign-in for the Personal Agent, so the User doesn't sign in again at each Company.
 
-**Where it stands:** Not started in the spec. Today the User signs in at each Company's own authorization server ([4.2](https://personalagentprotocol.org/docs/1.0/spec#direct-sign-in), [4.3](https://personalagentprotocol.org/docs/1.0/spec#device-sign-in)). A Company's sign-in page can already offer an identity provider, but the User still signs in once per Company, and the Company can't tell the Personal Agent which identity providers it accepts.
+**Where it stands:** Not started in the spec. Today the User signs in at each Company's own authorization server ([4.2](https://personalagentprotocol.org/docs/1.1/spec#direct-sign-in), [4.3](https://personalagentprotocol.org/docs/1.1/spec#device-sign-in)). A Company's sign-in page can already offer an identity provider, but the User still signs in once per Company, and the Company can't tell the Personal Agent which identity providers it accepts.
 
 ### Attachments
 
@@ -76,7 +76,7 @@ There are several areas we want to invest more in, roughly in order of priority 
 
 ### Drop Mediated Sign-In
 
-**Goal:** Remove the [Mediated Sign-In extension](https://personalagentprotocol.org/docs/1.0/extensions/mediated-sign-in), so Users sign in on the Company's own page and Personal Agents never handle a User's password or one-time code.
+**Goal:** Remove the [Mediated Sign-In extension](https://personalagentprotocol.org/docs/1.1/extensions/mediated-sign-in), so Users sign in on the Company's own page and Personal Agents never handle a User's password or one-time code.
 
 **Where it stands:** Mediated Sign-In, where the Personal Agent signs in with the User's credentials, is transitional. The protocol plans to remove it on March 17, 2027, and Direct Sign-In is now the preferred sign-in type. Still open: whether Direct Sign-In should be the one required type, and what to say about agents typing a password into a Company's website, which happens outside the protocol.
 
