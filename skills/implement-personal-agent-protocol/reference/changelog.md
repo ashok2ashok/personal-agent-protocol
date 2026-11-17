@@ -10,6 +10,26 @@ Version 1.0 is published. Build against [1.0](https://personalagentprotocol.org/
 
 In progress. This list grows until 1.1 is published.
 
+### Minor changes
+
+#### A request that fails the version and Session checks
+
+[Spec 3.4](https://personalagentprotocol.org/docs/1.1/spec#versions) · [Issue #87](https://github.com/personal-agent-protocol/personal-agent-protocol/issues/87)
+
+A request can fail the `Poppy-Version` check and Session verification at once, such as one that leaves out both headers. The Company chooses which check runs first, so either `version_unsupported` or `invalid_session` is a correct answer, and the Personal Agent recovers as the error it got describes. Before, the text left open which one applied.
+
+#### Rounded delegation `iat`
+
+[Spec 5.2](https://personalagentprotocol.org/docs/1.1/spec#session-header) · [Guides: Signing and verifying JWTs](https://personalagentprotocol.org/docs/1.1/guides#both-signing) · [Issue #87](https://github.com/personal-agent-protocol/personal-agent-protocol/issues/87)
+
+A Personal Agent may set a delegation's `iat` earlier than the time it signs, as the guides recommend for privacy, with `exp` at most 24 hours after that `iat`. A Company allows an `iat` any time in the past, and checks that the delegation hasn't expired and that its `exp` is at most 24 hours after its `iat`. Before, 5.2 called `iat` the time the delegation was issued, so a Company could read a rounded one as wrong.
+
+#### Rate limit response bodies
+
+[Spec 5.6](https://personalagentprotocol.org/docs/1.1/spec#sending-requests) · [Mediated Sign-In 5](https://personalagentprotocol.org/docs/1.1/extensions/mediated-sign-in#errors) · [Issue #87](https://github.com/personal-agent-protocol/personal-agent-protocol/issues/87)
+
+The specification defines no body for a 429, so a Personal Agent acts on the status code and `Retry-After` alone. At the token endpoint a 429 needs no OAuth `error` value. Device Sign-In's `slow_down` stays an OAuth error with HTTP 400.
+
 ## Version 1.0
 
 Published November 14, 2026. It's [0.4](https://personalagentprotocol.org/docs/0.4/spec) with the fixes implementers needed. Major changes are design decisions. Minor changes fill gaps, make the text consistent, or follow an RFC. A change tagged "Breaking" can require an implementation that followed the 0.4 text to change, whether it's major or minor.

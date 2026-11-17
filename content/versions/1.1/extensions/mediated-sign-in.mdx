@@ -124,7 +124,7 @@ is transitional (1), so it keeps the step in the grant at `token_endpoint` inste
 
 Errors are OAuth error responses from the token endpoint, with HTTP 400 unless shown otherwise. The
 usual token endpoint errors also apply, such as `invalid_client`. Rate limits are HTTP 429 with `Retry-After`, as in [spec
-5.6](/docs/spec#sending-requests).
+5.6](/docs/spec#sending-requests), and that response needs no `error` value.
 
 | Error           | Meaning                                                                                                                                |
 | --------------- | -------------------------------------------------------------------------------------------------------------------------------------- |

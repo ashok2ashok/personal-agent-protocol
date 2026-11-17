@@ -431,6 +431,12 @@ the request again, once. Otherwise it stops sending the request.
 { "error": "version_unsupported" }
 ```
 
+A request can fail this check and Session verification (5.3) at once, such as one that leaves out
+both `Poppy-Session` and `Poppy-Version`. The Company chooses which check runs first, so it MAY
+answer such a request with `version_unsupported` or with `invalid_session`, and the Personal Agent
+recovers as the error it got describes (section 7). A request whose only fault is its version
+always gets `version_unsupported`.
+
 **Minor versions.** From 1.0, each side sends only what the other side's version defines. The
 Company MUST NOT send the Personal Agent a field, value, or event that only a minor version later
 than the request's `Poppy-Version` defines. The Personal Agent MUST NOT send the Company one that
@@ -1017,7 +1023,12 @@ at one Company (10.7).
 - `cnf.jwk` is the delegated public key, in the confirmation claim of
   [RFC 7800](https://www.rfc-editor.org/rfc/rfc7800). It MUST NOT contain private key members.
 - `iat` and `exp` are when the delegation was issued and when it expires. `exp` MUST be at most 24
-  hours after `iat`. The Personal Agent chooses the lifetime within that limit.
+  hours after `iat`. The Personal Agent chooses the lifetime within that limit. It MAY set `iat`
+  earlier than the time it signs, such as rounded down to the start of the hour, so that
+  delegations issued together can't be matched by their times. `exp` is then at most 24 hours
+  after that earlier `iat`. A Company MUST allow an `iat` any time in the past: its checks on a
+  delegation's times are that the delegation hasn't expired and that its `exp` is at most 24 hours
+  after its `iat`.
 - `jti` is a unique, unguessable ID for the delegation.
 - The Personal Agent MUST NOT put a User ID, an Agent ID, a Company's issuer, or anything else about
   the User or the Companies they use in a delegation.
@@ -1203,6 +1214,12 @@ When a Session continues signed out:
 ([RFC 9110 §10.2.3](https://www.rfc-editor.org/rfc/rfc9110#section-10.2.3)) when a request goes
 over the limit, on any of its endpoints, APIs, conversations, or website. The Personal Agent MUST wait at least that long before sending the
 request again.
+
+This specification defines no body for a 429, so the Personal Agent acts on the status code and
+`Retry-After` alone. The same holds at the token endpoint, where a 429 needs no OAuth `error`
+value. Device Sign-In's `slow_down` (4.3,
+[RFC 8628 §3.5](https://www.rfc-editor.org/rfc/rfc8628#section-3.5)) stays an OAuth error, with
+HTTP 400, for polling faster than `interval`.
 
 ## 6. Web browsing {#web-browsing}
 
